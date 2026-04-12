@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maison Mayje - Adoption d'animaux</title>
+    <style>
+               @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap');
+
+        :root {
+            --primary-green: #27ae60; 
+            --light-green: #f4fcf7;   
+            --dark-green: #1e8449;    
+            --text-color: #2c3e50;
+            --accent-color: #f1c40f; /* Un jaune chaleureux pour souligner les titres */
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, var(--light-green) 0%, #e3f2e8 100%);
+            color: var(--text-color);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        header {
+            background: linear-gradient(135deg, #1e8449 0%, #27ae60 100%);
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(39, 174, 96, 0.2);
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-top: 15px;
+            font-weight: 400;
+        }
+
+        /* Effet "carte flottante" pour le texte */
+        .content-section {
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 50px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            border-left: 6px solid var(--primary-green);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .content-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .content-section h2 {
+            color: var(--dark-green);
+            margin-top: 0;
+            font-size: 2.2rem;
+            font-weight: 800;
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            border: none; /* On enlève l'ancienne bordure */
+        }
+
+        /* Joli trait de soulignement moderne */
+        .content-section h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .content-section p {
+            font-size: 1.15rem;
+            color: #444;
+            margin-bottom: 20px;
+        }
+
+        /* Menu horizontal */
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 50px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow-x: auto;
+            gap: 25px;
+            padding: 30px 10px;
+            scrollbar-width: none; 
+        }
+
+        .carousel::-webkit-scrollbar {
+            display: none; 
+        }
+
+        /* Cartes d'animaux plus douces et animées */
+        .animal-card {
+            position: relative;
+            min-width: 240px; 
+            height: 340px;    
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            cursor: pointer;
+            flex-shrink: 0;
+            background-color: #fff;
+            /* Animation élastique au survol de la carte entière */
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        .animal-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(39, 174, 96, 0.2);
+        }
+
+        .animal-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .animal-card:hover img {
+            transform: scale(1.15);
+        }
+
+        /* Voile vert avec effet verre dépoli (blur) */
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(30, 132, 73, 0.95), rgba(39, 174, 96, 0.6)); 
+            backdrop-filter: blur(2px); 
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .animal-card:hover .overlay {
+            opacity: 1;
+        }
+
+        /* Animations d'apparition du texte */
+        .animal-name {
+            font-size: 1.8rem; 
+            font-weight: 900;
+            margin-bottom: 12px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            transform: translateY(20px);
+            transition: transform 0.4s ease;
+        }
+
+        .animal-card:hover .animal-name {
+            transform: translateY(0);
+        }
+
+        .cadence-stat {
+            font-size: 0.9rem; 
+            background-color: white;
+            color: var(--dark-green);
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 800;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            line-height: 1.4;
+            transform: translateY(20px);
+            transition: transform 0.4s ease 0.1s; /* Arrive un peu après le nom */
+        }
+
+        .animal-card:hover .cadence-stat {
+            transform: translateY(0);
+        }
+
+        /* Boutons avec dégradés */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, var(--primary-green), var(--dark-green));
+            color: white;
+            border: none;
+            width: 50px; 
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, var(--dark-green), var(--primary-green));
+            transform: translateY(-50%) scale(1.15);
+            box-shadow: 0 8px 20px rgba(39, 174, 96, 0.6);
+        }
+
+        .prev-btn { left: -5px; }
+        .next-btn { right: -5px; }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+            margin-top: 50px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            background: rgba(255,255,255,0.5);
+        }
+
+        @media (max-width: 768px) {
+            .nav-btn { display: none; } 
+            .carousel-container { padding: 0 15px; margin: 30px auto; }
+            .content-section { margin: 20px; padding: 30px 20px; border-left-width: 4px; }
+            header { border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; padding: 3rem 1rem; }
+            header h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Maison Mayje</h1>
+    <p>Adoptez votre futur compagnon et offrez-lui une nouvelle vie</p>
+</header>
+
+<!-- 1. Section : Histoire de l'association -->
+<section class="content-section">
+    <h2>Notre Histoire</h2>
+    <p>La Maison Mayje est née en 2014 d'une conviction profonde : chaque animal mérite de fouler l'herbe fraîche plutôt que le béton froid d'un chenil. Fondée par Marguerite Mayje, une ancienne garde forestière reconvertie en mère de substitution pour boules de poils en détresse, notre association a commencé dans une simple grange au toit percé.</p>
+    <p>Aujourd'hui, grâce à une équipe de bénévoles passionnés, la Maison Mayje est devenue un véritable écrin de verdure de plusieurs hectares. Nous fonctionnons sans cages traditionnelles : nos protégés évoluent dans des enclos paysagers qui respectent leur besoin de courir, de creuser et de grimper. Notre mission n'est pas seulement de les placer, mais de trouver l'alchimie parfaite entre votre rythme de vie et leur fameuse "cadence de tir".</p>
+</section>
+
+<!-- 2. Section : Le menu horizontal des animaux (déplacé ici et agrandi en nombre) -->
+<div class="carousel-container">
+    <button class="nav-btn prev-btn" onclick="scrollCarousel(-1)">&#10094;</button>
+    
+    <div class="carousel" id="animalCarousel">
+        
+        <div class="animal-card">
+            <img src="photo-dump-of-my-cat-being-random-very-funny-v0-3auke4ykpg1d1.jpg" alt="Chat Luna">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Cadence de tir: brbrbrbr papapaw	 	 environ<br></div>
+            </div>
+        </div>
+        
+        <div class="animal-card">
+            <img src="vue-rapprochee-du-style-vie-animaux-compagnie_23-2149180526.avif" alt="Chien Max">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Cadence de tir: 60km/h quand il pleut<br></div>
+            </div>
+        </div>
+
+        <div class="animal-card">
+            <img src="9697fd42a895b90430a3cfac38dd1b5f7fe2c660.jpg" alt="Lapin Pompon">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Cadence de tir: A peine plus vite qu'un doggo<br></div>
+            </div>
+        </div>
+
+        <div class="animal-card">
+            <img src="acd51c9f-235d-4672-88e6-11ccfbf36373.png" alt="Chien Bella">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Meow type glace<br></div>
+            </div>
+        </div>
+        <div class="animal-card">
+            <img src="ab67616d00001e020c4f6bd07193ddc416100cf0.jpg" alt="Chat Simba">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Meowl<br></div>
+            </div>
+        </div>
+
+        <div class="animal-card">
+            <img src="dd8dc612-2fb7-41a1-b0ab-9bbffbbb1081.png" alt="Chien Rocky">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Aquameow<br></div>
+            </div>
+        </div>
+
+        <div class="animal-card">
+            <img src="eb09c681-7881-45e2-ae61-f2c37abe6f6c.png" alt="Chat Nala">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Meow serein de la forêt<br></div>
+            </div>
+        </div>
+
+        <div class="animal-card">
+            <img src="0592d581-56a8-434c-930d-c718e1525952.png" alt="Chien Daisy">
+            <div class="overlay">
+                <div class="animal-name">Mimi</div>
+                <div class="cadence-stat">Lézardinho<br></div>
+            </div>
+        </div>
+
+    </div>
+    
+    <button class="nav-btn next-btn" onclick="scrollCarousel(1)">&#10095;</button>
+</div>
+
+<!-- 3. Section : Impact économique absurde (Aspirateurs) -->
+<section class="content-section">
+    <h2>L'effet papillon : Quand l'abandon fait chuter Wall Street</h2>
+    <p>On parle souvent du traumatisme que représente l'abandon pour nos amis à quatre pattes. Mais un phénomène macro-économique insoupçonné a récemment ébranlé les marchés financiers mondiaux : l'effondrement du cours des aspirateurs.</p>
+    <p>Les experts de la Bourse sont formels : un foyer qui abandonne son animal, c'est un foyer qui n'a soudainement plus de poils sur ses tapis. Au cours du tragique été dernier, la baisse drastique de poils de chats et de chiens dans les salons a provoqué une chute vertigineuse de 43% des actions des grands fabricants d'électroménager (Dyson, Rowenta et Hoover en tête). Leurs modèles "Spécial Animaux", autrefois fleurons de l'industrie, prennent désormais la poussière dans les entrepôts. Adopter un animal chez Maison Mayje, c'est donc non seulement sauver une vie, mais c'est aussi un acte citoyen pour relancer l'industrie mondiale de l'aspiration et sauver des milliers d'emplois dans la filière de l'électroménager !</p>
+</section>
+
+<footer>
+  <footer>
+    <p>&copy; 2026 Maison Mayje - Association de protection animale. Tous droits réservés. | <a href="mentions-legales.html" style="color: var(--primary-green); font-weight: bold; text-decoration: none;">Mentions Légales</a></p>
+</footer>
+</footer>
+
+<script>
+    function scrollCarousel(direction) {
+        const carousel = document.getElementById('animalCarousel');
+        
+        // On s'assure que le navigateur ne ralentit pas l'animation
+        carousel.style.scrollBehavior = 'auto';
+        
+        const distance = 245; // Largeur d'une carte + espace
+        const start = carousel.scrollLeft;
+        const end = start + (direction * distance);
+        
+        // --- RÉGLAGE DE LA VITESSE ICI ---
+        // 150 = très rapide (en millisecondes). 
+        // Si c'est trop rapide, passez à 200 ou 250.
+        const duration = 200; 
+        let startTime = null;
+
+        function animate(currentTime) {
+            if (!startTime) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const progress = Math.min(timeElapsed / duration, 1);
+            
+            // Effet d'accélération/décélération (ease-out) pour plus de fluidité
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            
+            carousel.scrollLeft = start + ((end - start) * easeOut);
+            
+            if (timeElapsed < duration) {
+                window.requestAnimationFrame(animate);
+            } else {
+                // On restaure le comportement naturel pour la navigation au doigt sur mobile
+                carousel.style.scrollBehavior = 'smooth';
+            }
+        }
+        window.requestAnimationFrame(animate);
+    }
+</script>
+
+</body>
+</html>
